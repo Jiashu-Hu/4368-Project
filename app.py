@@ -7,8 +7,10 @@ from openai import OpenAI
 # Load environment variables from .env file
 load_dotenv()
 
-# Load API key
+# Load API key and base URL
 api_key = os.getenv("OPENAI_API_KEY")
+api_base = os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1/")
+
 if not api_key:
     st.error("Please set the OPENAI_API_KEY environment variable!")
     st.stop()
@@ -26,7 +28,7 @@ preference = st.selectbox(
 # Generate button
 if st.button("Generate Recipe!"):
     with st.spinner("AI is thinking..."):
-        client = OpenAI(api_key=api_key)
+        client = OpenAI(api_key=api_key, base_url=api_base)
         prompt = f"""
         You are an eco-friendly chef focused on zero waste. Based on leftover ingredients: {", ".join([ing.strip() for ing in ingredients if ing.strip()])}
         and preference: {preference}, generate 1-2 simple recipes.
